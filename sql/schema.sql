@@ -5,7 +5,6 @@ CREATE TABLE accounts (
   account_id INTEGER PRIMARY KEY,
   account_name VARCHAR(100) NOT NULL UNIQUE,
   account_type VARCHAR(20) NOT NULL,
-  display_order INTEGER NOT NULL DEFAULT 0,
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   CHECK (account_type IN ('asset', 'liability'))
 );

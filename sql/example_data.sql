@@ -1,11 +1,11 @@
 -- Example configurable accounts and one dated balance-sheet snapshot.
 
-INSERT INTO accounts (account_id, account_name, account_type, display_order)
+INSERT INTO accounts (account_id, account_name, account_type)
 VALUES
-  (1, 'Cash', 'asset', 1),
-  (2, 'Investments', 'asset', 2),
-  (3, 'Mortgage', 'liability', 1),
-  (4, 'Credit Card', 'liability', 2);
+  (1, 'Cash', 'asset'),
+  (2, 'Investments', 'asset'),
+  (3, 'Mortgage', 'liability'),
+  (4, 'Credit Card', 'liability');
 
 INSERT INTO balance_sheet_dates (balance_date)
 VALUES ('2026-09-14');

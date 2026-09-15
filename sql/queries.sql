@@ -24,4 +24,4 @@ LEFT JOIN account_balances AS b
   ON b.account_id = a.account_id
  AND b.balance_date = ?
 WHERE a.is_active = TRUE
-ORDER BY a.account_type, a.display_order, a.account_name;
+ORDER BY a.account_type, a.account_name;
