@@ -12,23 +12,23 @@ CREATE TABLE accounts (
 ) ENGINE=InnoDB;
 
 CREATE TABLE dates (
-  balance_date DATE NOT NULL,
-  PRIMARY KEY (balance_date)
+  `date` DATE NOT NULL,
+  PRIMARY KEY (`date`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE balances (
-  balance_date DATE NOT NULL,
+  `date` DATE NOT NULL,
   account_id SMALLINT UNSIGNED NOT NULL,
   amount DECIMAL(18,2) NOT NULL,
 
-  PRIMARY KEY (balance_date, account_id),
-  FOREIGN KEY (balance_date) REFERENCES dates(balance_date),
+  PRIMARY KEY (`date`, account_id),
+  FOREIGN KEY (`date`) REFERENCES dates(`date`),
   FOREIGN KEY (account_id) REFERENCES accounts(account_id),
   CONSTRAINT chk_balances_amount CHECK (amount >= 0)
 ) ENGINE=InnoDB;
 
 CREATE INDEX idx_balances_account_date
-  ON balances (account_id, balance_date);
+  ON balances (account_id, `date`);
 
 -- Account type determines the sign interpretation of all historical balances,
 -- so it must never change after an account is created.

@@ -7,10 +7,10 @@ VALUES
   (3, 'Mortgage', 'liability'),
   (4, 'Credit Card', 'liability');
 
-INSERT INTO dates (balance_date)
+INSERT INTO dates (`date`)
 VALUES ('2026-09-14');
 
-INSERT INTO balances (balance_date, account_id, amount)
+INSERT INTO balances (`date`, account_id, amount)
 VALUES
   ('2026-09-14', 1, 12500.00),
   ('2026-09-14', 2, 85000.00),
