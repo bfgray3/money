@@ -2,7 +2,7 @@
 -- Amounts are stored as positive values; account_type supplies the sign meaning.
 
 CREATE TABLE accounts (
-  account_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  account_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
   account_name VARCHAR(100) NOT NULL UNIQUE,
   account_type VARCHAR(20) NOT NULL,
   is_active TINYINT(1) NOT NULL DEFAULT 1,
@@ -18,7 +18,7 @@ CREATE TABLE balance_sheet_dates (
 
 CREATE TABLE account_balances (
   balance_date DATE NOT NULL,
-  account_id BIGINT UNSIGNED NOT NULL,
+  account_id SMALLINT UNSIGNED NOT NULL,
   amount DECIMAL(18,2) NOT NULL,
 
   PRIMARY KEY (balance_date, account_id),
