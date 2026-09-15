@@ -11,24 +11,24 @@ CREATE TABLE accounts (
   CONSTRAINT chk_accounts_is_active CHECK (is_active IN (0, 1))
 ) ENGINE=InnoDB;
 
-CREATE TABLE balance_sheet_dates (
+CREATE TABLE dates (
   balance_date DATE NOT NULL,
   PRIMARY KEY (balance_date)
 ) ENGINE=InnoDB;
 
-CREATE TABLE account_balances (
+CREATE TABLE balances (
   balance_date DATE NOT NULL,
   account_id SMALLINT UNSIGNED NOT NULL,
   amount DECIMAL(18,2) NOT NULL,
 
   PRIMARY KEY (balance_date, account_id),
-  FOREIGN KEY (balance_date) REFERENCES balance_sheet_dates(balance_date),
+  FOREIGN KEY (balance_date) REFERENCES dates(balance_date),
   FOREIGN KEY (account_id) REFERENCES accounts(account_id),
-  CONSTRAINT chk_account_balances_amount CHECK (amount >= 0)
+  CONSTRAINT chk_balances_amount CHECK (amount >= 0)
 ) ENGINE=InnoDB;
 
-CREATE INDEX idx_account_balances_account_date
-  ON account_balances (account_id, balance_date);
+CREATE INDEX idx_balances_account_date
+  ON balances (account_id, balance_date);
 
 -- Account type determines the sign interpretation of all historical balances,
 -- so it must never change after an account is created.

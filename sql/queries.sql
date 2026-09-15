@@ -8,7 +8,7 @@ SELECT
         WHEN a.account_type = 'asset' THEN b.amount
         WHEN a.account_type = 'liability' THEN -b.amount
       END) AS net_worth
-FROM account_balances AS b
+FROM balances AS b
 JOIN accounts AS a ON a.account_id = b.account_id
 GROUP BY b.balance_date
 ORDER BY b.balance_date;
@@ -20,7 +20,7 @@ SELECT
   a.account_type,
   COALESCE(b.amount, 0) AS amount
 FROM accounts AS a
-LEFT JOIN account_balances AS b
+LEFT JOIN balances AS b
   ON b.account_id = a.account_id
  AND b.balance_date = ?
 WHERE a.is_active = TRUE
