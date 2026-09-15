@@ -38,7 +38,7 @@ CREATE TRIGGER prevent_account_type_change
 BEFORE UPDATE ON accounts
 FOR EACH ROW
 BEGIN
-  IF NEW.account_type <> OLD.account_type THEN
+  IF NEW.account_type != OLD.account_type THEN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'account_type is immutable';
   END IF;
