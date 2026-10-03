@@ -2,6 +2,7 @@ from collections.abc import AsyncIterator
 from datetime import date
 from decimal import Decimal
 import os
+from pathlib import Path
 
 import aiomysql
 import pytest_asyncio
@@ -66,4 +67,67 @@ async def test_example_snapshot_has_expected_monthly_total(pool: aiomysql.Pool) 
         Decimal("97500.00"),
         Decimal("211800.00"),
         Decimal("-114300.00"),
+    )
+
+
+async def test_monthly_pivot_query_includes_change_from_previous_date(
+    pool: aiomysql.Pool,
+) -> None:
+    async with pool.acquire() as connection:
+        async with connection.cursor() as cursor:
+            await cursor.execute("INSERT INTO dates (`date`) VALUES ('2026-10-14')")
+            await cursor.executemany(
+                "INSERT INTO balances (`date`, account_id, amount) VALUES (%s, %s, %s)",
+                [
+                    ("2026-10-14", 1, Decimal("13000.00")),
+                    ("2026-10-14", 2, Decimal("86000.00")),
+                    ("2026-10-14", 3, Decimal("209000.00")),
+                    ("2026-10-14", 4, Decimal("1700.00")),
+                ],
+            )
+
+            queries_path = Path(__file__).parents[1] / "sql" / "queries.sql"
+            pivot_sql = queries_path.read_text().split(
+                "SET SESSION", maxsplit=1
+            )[1]
+            pivot_sql = "SET SESSION" + pivot_sql
+            rows = []
+            column_names = ()
+            for statement in pivot_sql.split(";"):
+                statement = statement.strip()
+                if not statement:
+                    continue
+                await cursor.execute(statement)
+                if statement.startswith("EXECUTE monthly_balance_statement"):
+                    rows = await cursor.fetchall()
+                    column_names = tuple(column[0] for column in cursor.description)
+
+    assert column_names == (
+        "date",
+        "asset_Cash",
+        "asset_Investments",
+        "liability_Credit Card",
+        "liability_Mortgage",
+        "total",
+        "change_from_previous_date",
+    )
+    assert rows == (
+        (
+            date(2026, 9, 14),
+            Decimal("12500.00"),
+            Decimal("85000.00"),
+            Decimal("1800.00"),
+            Decimal("210000.00"),
+            Decimal("-114300.00"),
+            None,
+        ),
+        (
+            date(2026, 10, 14),
+            Decimal("13000.00"),
+            Decimal("86000.00"),
+            Decimal("1700.00"),
+            Decimal("209000.00"),
+            Decimal("-111700.00"),
+            Decimal("2600.00"),
+        ),
     )
