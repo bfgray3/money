@@ -1,0 +1,18 @@
+[project]
+name = "money-db-tests"
+version = "0.1.0"
+description = "Integration tests for the money database"
+requires-python = ">=3.12"
+dependencies = [
+  "aiomysql>=0.2.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

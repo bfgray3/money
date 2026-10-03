@@ -1,6 +1,9 @@
 .git
 .agents
 .codex
+.venv
+__pycache__
+.pytest_cache
 README.md
 Makefile
 sql/queries.sql

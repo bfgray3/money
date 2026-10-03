@@ -1,0 +1,29 @@
+services:
+  db:
+    build:
+      context: .
+    environment:
+      MYSQL_DATABASE: money
+      MYSQL_USER: money_test
+      MYSQL_PASSWORD: money_test_password
+      MYSQL_ROOT_PASSWORD: money_root_test_password
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  tests:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: "3306"
+      MYSQL_DATABASE: money
+      MYSQL_USER: money_test
+      MYSQL_PASSWORD: money_test_password
+    depends_on:
+      db:
+        condition: service_healthy
