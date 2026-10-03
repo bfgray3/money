@@ -27,8 +27,8 @@ run:
 	  -d "$(IMAGE)"
 
 test:
-	@docker compose -f compose.test.yaml down --volumes --remove-orphans
-	@docker compose -f compose.test.yaml up --build --abort-on-container-exit --exit-code-from tests; \
+	@docker compose down --volumes --remove-orphans
+	@docker compose up --build --abort-on-container-exit --exit-code-from tests; \
 	  result=$$?; \
-	  docker compose -f compose.test.yaml down --volumes --remove-orphans; \
+	  docker compose down --volumes --remove-orphans; \
 	  exit $$result
